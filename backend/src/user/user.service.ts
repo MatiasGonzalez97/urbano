@@ -30,13 +30,14 @@ export class UserService {
       }
     });
 
-    return User.find({
+    const userResponse = await User.find({ //await missing and response error fixed
       where: userQuery,
       order: {
         firstName: 'ASC',
         lastName: 'ASC',
       },
     });
+    return userResponse as User[];
   }
 
   async findById(id: string): Promise<User> {

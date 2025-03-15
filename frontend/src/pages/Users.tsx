@@ -58,7 +58,9 @@ export default function Users() {
 
   return (
     <Layout>
-      <h1 className="font-semibold text-3xl mb-5">Manage Users</h1>
+      <h1 className="font-semibold text-3xl mb-5 bg-brand-header p-5">
+        Manage Users
+      </h1>
       <hr />
       <button
         className="btn my-5 flex gap-2 w-full sm:w-auto justify-center"

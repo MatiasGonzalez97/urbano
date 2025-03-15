@@ -2,6 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --brand-primary: #c1292e;
+  --brand-background: #ffffff;
+  --brand-active: #c1292e;
+  --brand-header-background: #e2e1e1;
+  --primary-red: #c1292e;
+  --red-hover: #c1292e;
+  --primary-white: #ffffff;
+  --white-hover: #f2f2f2;
+}
+/* Clases personalizadas para usar variables CSS en Tailwind */
+.bg-brand-primary {
+  background-color: var(--brand-primary);
+  color: var(--primary-white);
+}
+
+.text-brand-primary {
+  color: var(--brand-primary);
+}
+
+.bg-brand-header {
+  background-color: var(--brand-header-background);
+}
+
+.text-primary-white {
+  color: var(--primary-white);
+}
+
+.bg-white-hover:hover {
+  background-color: var(--white-hover);
+}
+
 @layer base {
   html,
   body,
@@ -24,9 +56,12 @@
 
 @layer components {
   .btn {
+    
     @apply p-3 bg-blue-500 rounded-md focus:outline-none text-white;
     @apply hover:bg-blue-700 transition-all;
     @apply focus:ring disabled:opacity-50;
+    background-color: #c1292e;
+    
   }
   .btn.danger {
     @apply bg-red-500 hover:bg-red-700;

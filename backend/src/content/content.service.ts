@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { ILike } from 'typeorm';
+import { getRepository, ILike } from 'typeorm';
 
 import { CourseService } from '../course/course.service';
 import { CreateContentDto, UpdateContentDto } from './content.dto';
@@ -28,14 +28,14 @@ export class ContentService {
     Object.keys(contentQuery).forEach((key) => {
       contentQuery[key] = ILike(`%${contentQuery[key]}%`);
     });
-
-    return await Content.find({
+    const contents= await getRepository(Content).find({
       where: contentQuery,
       order: {
         name: 'ASC',
         description: 'ASC',
       },
     });
+    return contents
   }
 
   async findById(id: string): Promise<Content> {

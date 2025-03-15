@@ -24,7 +24,7 @@ export class CourseService {
         name: 'ASC',
         description: 'ASC',
       },
-    });
+    }) as Course[];
   }
 
   async findById(id: string): Promise<Course> {

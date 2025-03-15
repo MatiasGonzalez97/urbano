@@ -50,7 +50,9 @@ export default function Courses() {
 
   return (
     <Layout>
-      <h1 className="font-semibold text-3xl mb-5">Manage Courses</h1>
+      <h1 className="font-semibold text-3xl mb-5 bg-brand-header p-5">
+        Manage Courses
+      </h1>
       <hr />
       {authenticatedUser.role !== 'user' ? (
         <button

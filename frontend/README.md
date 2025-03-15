@@ -44,3 +44,21 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+
+[]Despegar app con docker 
+[X] Camiar titulo 
+[] Cambiar favicon
+[] modificar estilo con paleta de colores
+[] fuentes
+[] Manejo de información. En las páginas se utiliza una librería “react-
+query” que está generando peticiones a la API cada 1 segundo para
+
+refrescar la información que se muestra al usuario. Podrías cambiar este
+comportamiento colocando un botón para refrescar y/o solicitar la
+información a la API a medida que el usuario interactúa con los filtros de
+la tabla (relacionado al siguiente punto).
+[] Soporte multilenguaje. Posibilidad de seleccionar idioma inglés o
+español.
+[] Sección Contacto. Formulario que dispare envío de email a una casilla
+configurable.
