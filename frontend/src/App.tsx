@@ -5,6 +5,7 @@ import useAuth from './hooks/useAuth';
 import Contents from './pages/Contents';
 import Courses from './pages/Courses';
 import Dashboard from './pages/Dashboard';
+import Email from './pages/Email';
 import Login from './pages/Login';
 import Users from './pages/Users';
 import { AuthRoute, PrivateRoute } from './Route';
@@ -37,6 +38,7 @@ export default function App() {
     <Router>
       <Switch>
         <PrivateRoute exact path="/" component={Dashboard} />
+        <PrivateRoute exact path="/emails" component={Email} />
         <PrivateRoute exact path="/users" component={Users} roles={['admin']} />
         <PrivateRoute exact path="/courses" component={Courses} />
         <PrivateRoute exact path="/courses/:id" component={Contents} />

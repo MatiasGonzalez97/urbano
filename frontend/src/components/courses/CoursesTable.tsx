@@ -12,17 +12,27 @@ import Table from '../shared/Table';
 import TableItem from '../shared/TableItem';
 
 interface UsersTableProps {
-  data: Course[];
+  data: Course[] | undefined;
   isLoading: boolean;
+  refetch;
 }
 
-export default function CoursesTable({ data, isLoading }: UsersTableProps) {
+export default function CoursesTable({
+  data = [],
+  isLoading,
+  refetch,
+}: UsersTableProps) {
   const { authenticatedUser } = useAuth();
   const [deleteShow, setDeleteShow] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
-  const [selectedCourseId, setSelectedCourseId] = useState<string>();
-  const [error, setError] = useState<string>();
+  const [selectedCourseId, setSelectedCourseId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [updateShow, setUpdateShow] = useState<boolean>(false);
+
+  // Estados para los filtros
+  const [nameFilter, setNameFilter] = useState<string>('');
+  const [descriptionFilter, setDescriptionFilter] = useState<string>('');
+  const [dateFilter, setDateFilter] = useState<string>('');
 
   const {
     register,
@@ -34,11 +44,13 @@ export default function CoursesTable({ data, isLoading }: UsersTableProps) {
 
   const handleDelete = async () => {
     try {
+      if (!selectedCourseId) return;
       setIsDeleting(true);
       await courseService.delete(selectedCourseId);
       setDeleteShow(false);
+      refetch(); // 🔄 Refresca los cursos después de eliminar
     } catch (error) {
-      setError(error.response.data.message);
+      setError(error.response?.data?.message || 'Error deleting course');
     } finally {
       setIsDeleting(false);
     }
@@ -46,22 +58,68 @@ export default function CoursesTable({ data, isLoading }: UsersTableProps) {
 
   const handleUpdate = async (updateCourseRequest: UpdateCourseRequest) => {
     try {
+      if (!selectedCourseId) return;
       await courseService.update(selectedCourseId, updateCourseRequest);
       setUpdateShow(false);
       reset();
       setError(null);
+      refetch(); // 🔄 Refresca los cursos después de eliminar
     } catch (error) {
-      setError(error.response.data.message);
+      setError(error.response?.data?.message || 'Error updating course');
     }
   };
+
+  // Filtrar datos basados en los inputs
+  const filteredData = data.filter(({ name, description, dateCreated }) => {
+    const courseDate = new Date(dateCreated).toLocaleDateString('en-CA'); // Formato YYYY-MM-DD
+
+    return (
+      name.toLowerCase().includes(nameFilter.toLowerCase()) &&
+      description.toLowerCase().includes(descriptionFilter.toLowerCase()) &&
+      (!dateFilter || courseDate.includes(dateFilter))
+    );
+  });
 
   return (
     <>
       <div className="table-container">
-        <Table columns={['Name', 'Description', 'Created']}>
+        <Table columns={['Name', 'Description', 'Created', 'Actions']}>
+          {/* Filtros en la cabecera */}
+          <tr>
+            <TableItem>
+              <input
+                type="text"
+                className="input w-full"
+                placeholder="nombre"
+                value={nameFilter}
+                onChange={(e) => setNameFilter(e.target.value)}
+              />
+            </TableItem>
+            <TableItem>
+              <input
+                type="text"
+                className="input w-full"
+                placeholder="descripcion"
+                value={descriptionFilter}
+                onChange={(e) => setDescriptionFilter(e.target.value)}
+              />
+            </TableItem>
+            <TableItem>
+              <input
+                type="date"
+                className="input w-full"
+                placeholder="fecha"
+                value={dateFilter}
+                onChange={(e) => setDateFilter(e.target.value)}
+              />
+            </TableItem>
+            <TableItem children={''}></TableItem>{' '}
+            {/* Columna vacía para acciones */}
+          </tr>
+
           {isLoading
             ? null
-            : data.map(({ id, name, description, dateCreated }) => (
+            : filteredData.map(({ id, name, description, dateCreated }) => (
                 <tr key={id}>
                   <TableItem>
                     <Link to={`/courses/${id}`}>{name}</Link>
@@ -71,22 +129,20 @@ export default function CoursesTable({ data, isLoading }: UsersTableProps) {
                     {new Date(dateCreated).toLocaleDateString()}
                   </TableItem>
                   <TableItem className="text-right">
-                    {['admin', 'editor'].includes(authenticatedUser.role) ? (
+                    {['admin', 'editor'].includes(authenticatedUser.role) && (
                       <button
                         className="text-indigo-600 hover:text-indigo-900 focus:outline-none"
                         onClick={() => {
                           setSelectedCourseId(id);
-
                           setValue('name', name);
                           setValue('description', description);
-
                           setUpdateShow(true);
                         }}
                       >
                         Edit
                       </button>
-                    ) : null}
-                    {authenticatedUser.role === 'admin' ? (
+                    )}
+                    {authenticatedUser.role === 'admin' && (
                       <button
                         className="text-red-600 hover:text-red-900 ml-3 focus:outline-none"
                         onClick={() => {
@@ -96,17 +152,19 @@ export default function CoursesTable({ data, isLoading }: UsersTableProps) {
                       >
                         Delete
                       </button>
-                    ) : null}
+                    )}
                   </TableItem>
                 </tr>
               ))}
         </Table>
-        {!isLoading && data.length < 1 ? (
+
+        {!isLoading && filteredData.length < 1 && (
           <div className="text-center my-5 text-gray-500">
-            <h1>Empty</h1>
+            <h1>No results found</h1>
           </div>
-        ) : null}
+        )}
       </div>
+
       {/* Delete Course Modal */}
       <Modal show={deleteShow}>
         <AlertTriangle size={30} className="text-red-500 mr-5 fixed" />
@@ -114,19 +172,14 @@ export default function CoursesTable({ data, isLoading }: UsersTableProps) {
           <h3 className="mb-2 font-semibold">Delete Course</h3>
           <hr />
           <p className="mt-2">
-            Are you sure you want to delete the course? All of course's data
-            will be permanently removed.
-            <br />
-            This action cannot be undone.
+            Are you sure you want to delete this course? This action cannot be
+            undone.
           </p>
         </div>
         <div className="flex flex-row gap-3 justify-end mt-5">
           <button
             className="btn"
-            onClick={() => {
-              setError(null);
-              setDeleteShow(false);
-            }}
+            onClick={() => setDeleteShow(false)}
             disabled={isDeleting}
           >
             Cancel
@@ -143,29 +196,25 @@ export default function CoursesTable({ data, isLoading }: UsersTableProps) {
             )}
           </button>
         </div>
-        {error ? (
+        {error && (
           <div className="text-red-500 p-3 font-semibold border rounded-md bg-red-50">
             {error}
           </div>
-        ) : null}
+        )}
       </Modal>
+
       {/* Update Course Modal */}
       <Modal show={updateShow}>
         <div className="flex">
           <h1 className="font-semibold mb-3">Update Course</h1>
           <button
             className="ml-auto focus:outline-none"
-            onClick={() => {
-              setUpdateShow(false);
-              setError(null);
-              reset();
-            }}
+            onClick={() => setUpdateShow(false)}
           >
             <X size={30} />
           </button>
         </div>
         <hr />
-
         <form
           className="flex flex-col gap-5 mt-5"
           onSubmit={handleSubmit(handleUpdate)}
@@ -182,7 +231,6 @@ export default function CoursesTable({ data, isLoading }: UsersTableProps) {
             className="input"
             placeholder="Description"
             required
-            disabled={isSubmitting}
             {...register('description')}
           />
           <button className="btn" disabled={isSubmitting}>
@@ -192,11 +240,11 @@ export default function CoursesTable({ data, isLoading }: UsersTableProps) {
               'Save'
             )}
           </button>
-          {error ? (
+          {error && (
             <div className="text-red-500 p-3 font-semibold border rounded-md bg-red-50">
               {error}
             </div>
-          ) : null}
+          )}
         </form>
       </Modal>
     </>

@@ -18,7 +18,7 @@ export default function Courses() {
   const [error, setError] = useState<string>();
 
   const { authenticatedUser } = useAuth();
-  const { data, isLoading } = useQuery(
+  const { data, isLoading, refetch } = useQuery(
     ['courses', name, description],
     () =>
       courseService.findAll({
@@ -26,7 +26,7 @@ export default function Courses() {
         description: description || undefined,
       }),
     {
-      refetchInterval: 1000,
+      enabled: true,
     },
   );
 
@@ -62,27 +62,14 @@ export default function Courses() {
           <Plus /> Add Course
         </button>
       ) : null}
+      <button
+        className="btn my-5 flex gap-2 w-full sm:w-auto justify-center bg-blue-500 text-white"
+        onClick={() => refetch()} // Ejecuta la consulta manualmente
+      >
+        Cargar Cursos
+      </button>
 
-      <div className="table-filter">
-        <div className="flex flex-row gap-5">
-          <input
-            type="text"
-            className="input w-1/2"
-            placeholder="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <input
-            type="text"
-            className="input w-1/2"
-            placeholder="Description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </div>
-      </div>
-
-      <CoursesTable data={data} isLoading={isLoading} />
+      <CoursesTable data={data} isLoading={isLoading} refetch={refetch} />
 
       {/* Add User Modal */}
       <Modal show={addCourseShow}>

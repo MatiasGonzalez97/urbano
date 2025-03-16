@@ -48,9 +48,9 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 
 []Despegar app con docker 
 [X] Camiar titulo 
-[] Cambiar favicon
-[] modificar estilo con paleta de colores
-[] fuentes
+[x] Cambiar favicon
+[x] modificar estilo con paleta de colores
+[x] fuentes
 [] Manejo de información. En las páginas se utiliza una librería “react-
 query” que está generando peticiones a la API cada 1 segundo para
 

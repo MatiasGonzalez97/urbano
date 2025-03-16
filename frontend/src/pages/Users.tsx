@@ -21,7 +21,7 @@ export default function Users() {
   const [addUserShow, setAddUserShow] = useState<boolean>(false);
   const [error, setError] = useState<string>();
 
-  const { data, isLoading } = useQuery(
+  const { data, isLoading, refetch } = useQuery(
     ['users', firstName, lastName, username, role],
     async () => {
       return (
@@ -34,7 +34,7 @@ export default function Users() {
       ).filter((user) => user.id !== authenticatedUser.id);
     },
     {
-      refetchInterval: 1000,
+      enabled: true,
     },
   );
 
@@ -68,7 +68,12 @@ export default function Users() {
       >
         <Plus /> Add User
       </button>
-
+      <button
+        className="btn my-5 flex gap-2 w-full sm:w-auto justify-center bg-blue-500 text-white"
+        onClick={() => refetch()} // Ejecuta la consulta manualmente
+      >
+        Cargar Usuarios
+      </button>
       <div className="table-filter mt-2">
         <div className="flex flex-row gap-5">
           <input

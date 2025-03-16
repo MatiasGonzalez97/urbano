@@ -1,10 +1,10 @@
-import { BookOpen, Home, LogOut, Users } from 'react-feather';
+import { BookOpen, Home, LogOut, Mail, Users } from 'react-feather';
 import { useHistory } from 'react-router';
-import { Link } from 'react-router-dom';
 
 import sidemenuBg from '../../assets/sidemenu-bg.jpg';
 import logo from '../../assets/urbano-logo-white.png';
 import useAuth from '../../hooks/useAuth';
+import Email from '../../pages/Email';
 import authService from '../../services/AuthService';
 import SidebarItem from './SidebarItem';
 
@@ -41,6 +41,9 @@ export default function Sidebar({ className }: SidebarProps) {
         </SidebarItem>
         <SidebarItem to="/courses">
           <BookOpen /> Courses
+        </SidebarItem>
+        <SidebarItem to="/emails">
+          <Mail /> Contacto
         </SidebarItem>
         {authenticatedUser.role === 'admin' ? (
           <SidebarItem to="/users">
