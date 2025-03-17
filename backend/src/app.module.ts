@@ -8,7 +8,9 @@ import { CourseModule } from './course/course.module';
 import { StatsModule } from './stats/stats.module';
 import { UserModule } from './user/user.module';
 import { EmailsModule } from './emails/emails.module';
-
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
+console.log(join(__dirname, '..', '/uploads'))
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -19,6 +21,10 @@ import { EmailsModule } from './emails/emails.module';
     ContentModule,
     StatsModule,
     EmailsModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', '/uploads'), 
+      serveRoot: '/uploads',
+    }),
   ],
   controllers: [],
   providers: [],
