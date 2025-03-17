@@ -114,7 +114,7 @@ export default function Users() {
         </div>
       </div>
 
-      <UsersTable data={data} isLoading={isLoading} />
+      <UsersTable data={data} isLoading={isLoading} refetch={refetch} />
 
       {/* Add User Modal */}
       <Modal show={addUserShow}>

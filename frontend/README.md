@@ -45,25 +45,28 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
-
+### *Pasos base solicitados*
 []Despegar app con docker 
 [X] Camiar titulo 
 [x] Cambiar favicon
 [x] modificar estilo con paleta de colores
 [x] fuentes
+### Opción A y B Optimizar alguna funcionalidad.
 [x] Manejo de información. En las páginas se utiliza una librería “react-
 query” que está generando peticiones a la API cada 1 segundo para
 
 refrescar la información que se muestra al usuario. Podrías cambiar este
 comportamiento colocando un botón para refrescar y/o solicitar la
 información a la API a medida que el usuario interactúa con los filtros de
-la tabla (relacionado al siguiente punto).
+la tabla (relacionado al siguiente punto). [Se agrego un boton para "cargar" los resultados]
 [X] Métodos de filtrado, ordenamiento y paginación. Los listados de cursos,
 contenidos y usuarios se presentan sin muchas opciones, es decir, se
 solicitan todos los registros para cada entidad y se permite filtrar por
 nombre o descripción desde el frontend. Sería una buena opción ofrecer
 al usuario la posibilidad de filtrar, ordenar y paginar los resultados.
+### Nueva funcionalidad, Formulario de contacto con envio de email
 [x] Sección Contacto. Formulario que dispare envío de email a una casilla
 configurable.
-[X] No es necesario actualziar la pagina para ver los cambios reflejados al actualizar o eliminar un curso 
-[X]  No es necesario actualziar la pagina para ver los cambios reflejados al actualizar o eliminar un usuario 
+### Mejoras extras
+[X] La tabla se actualiza sin necesidad de refrescar la pagina al actualizar o eliminar un curso 
+[X] La tabla se actualiza sin necesidad de refrescar la pagina al actualizar o eliminar un usuario  

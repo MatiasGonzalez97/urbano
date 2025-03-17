@@ -11,7 +11,7 @@ import Modal from '../shared/Modal';
 import Table from '../shared/Table';
 import TableItem from '../shared/TableItem';
 
-interface UsersTableProps {
+interface CourseTableProps {
   data: Course[] | undefined;
   isLoading: boolean;
   refetch;
@@ -21,7 +21,7 @@ export default function CoursesTable({
   data = [],
   isLoading,
   refetch,
-}: UsersTableProps) {
+}: CourseTableProps) {
   const { authenticatedUser } = useAuth();
   const [deleteShow, setDeleteShow] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
@@ -48,7 +48,7 @@ export default function CoursesTable({
       setIsDeleting(true);
       await courseService.delete(selectedCourseId);
       setDeleteShow(false);
-      refetch(); // 🔄 Refresca los cursos después de eliminar
+      refetch();
     } catch (error) {
       setError(error.response?.data?.message || 'Error deleting course');
     } finally {
@@ -63,15 +63,14 @@ export default function CoursesTable({
       setUpdateShow(false);
       reset();
       setError(null);
-      refetch(); // 🔄 Refresca los cursos después de eliminar
+      refetch();
     } catch (error) {
       setError(error.response?.data?.message || 'Error updating course');
     }
   };
 
-  // Filtrar datos basados en los inputs
   const filteredData = data.filter(({ name, description, dateCreated }) => {
-    const courseDate = new Date(dateCreated).toLocaleDateString('en-CA'); // Formato YYYY-MM-DD
+    const courseDate = new Date(dateCreated).toLocaleDateString('en-CA');
 
     return (
       name.toLowerCase().includes(nameFilter.toLowerCase()) &&
@@ -84,7 +83,6 @@ export default function CoursesTable({
     <>
       <div className="table-container">
         <Table columns={['Name', 'Description', 'Created', 'Actions']}>
-          {/* Filtros en la cabecera */}
           <tr>
             <TableItem>
               <input
@@ -114,7 +112,6 @@ export default function CoursesTable({
               />
             </TableItem>
             <TableItem children={''}></TableItem>{' '}
-            {/* Columna vacía para acciones */}
           </tr>
 
           {isLoading
@@ -165,7 +162,6 @@ export default function CoursesTable({
         )}
       </div>
 
-      {/* Delete Course Modal */}
       <Modal show={deleteShow}>
         <AlertTriangle size={30} className="text-red-500 mr-5 fixed" />
         <div className="ml-10">
@@ -203,7 +199,6 @@ export default function CoursesTable({
         )}
       </Modal>
 
-      {/* Update Course Modal */}
       <Modal show={updateShow}>
         <div className="flex">
           <h1 className="font-semibold mb-3">Update Course</h1>

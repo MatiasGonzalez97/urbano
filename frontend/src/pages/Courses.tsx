@@ -64,7 +64,7 @@ export default function Courses() {
       ) : null}
       <button
         className="btn my-5 flex gap-2 w-full sm:w-auto justify-center bg-blue-500 text-white"
-        onClick={() => refetch()} // Ejecuta la consulta manualmente
+        onClick={() => refetch()}
       >
         Cargar Cursos
       </button>

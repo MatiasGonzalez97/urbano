@@ -12,9 +12,14 @@ import TableItem from '../shared/TableItem';
 interface UsersTableProps {
   data: User[];
   isLoading: boolean;
+  refetch;
 }
 
-export default function UsersTable({ data, isLoading }: UsersTableProps) {
+export default function UsersTable({
+  data,
+  isLoading,
+  refetch,
+}: UsersTableProps) {
   const [deleteShow, setDeleteShow] = useState<boolean>(false);
   const [updateShow, setUpdateShow] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
@@ -34,6 +39,7 @@ export default function UsersTable({ data, isLoading }: UsersTableProps) {
       setIsDeleting(true);
       await userService.delete(selectedUserId);
       setDeleteShow(false);
+      refetch();
     } catch (error) {
       setError(error.response.data.message);
     } finally {
@@ -47,6 +53,7 @@ export default function UsersTable({ data, isLoading }: UsersTableProps) {
       setUpdateShow(false);
       reset();
       setError(null);
+      refetch();
     } catch (error) {
       setError(error.response.data.message);
     }
