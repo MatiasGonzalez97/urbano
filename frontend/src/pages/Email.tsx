@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { Loader } from 'react-feather';
+import { Loader, X } from 'react-feather';
 import { useForm } from 'react-hook-form';
 
 import Layout from '../components/layout';
+import Modal from '../components/shared/Modal'; // Asegúrate de importar el componente Modal
 import emailService from '../services/emailService';
 
 interface EmailForm {
+  to: string;
   from: string;
   subject: string;
   message: string;
@@ -18,27 +20,68 @@ export default function Email() {
     formState: { isSubmitting },
     reset,
   } = useForm<EmailForm>();
+
+  const [toEmail, setToEmail] = useState(''); // Estado para el destinatario
+  const [modalOpen, setModalOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
+
+  const confirmRecipient = () => {
+    if (toEmail.trim() !== '') {
+      closeModal();
+    }
+  };
+
   const sendEmail = async (data: EmailForm) => {
+    if (!toEmail) {
+      setErrorMessage(
+        'Por favor, configura el destinatario antes de enviar el email.',
+      );
+      return;
+    }
+
     setSuccessMessage(null);
     setErrorMessage(null);
 
     try {
-      await emailService.sendEmail(data);
-      setSuccessMessage('Email sent successfully!');
+      await emailService.sendEmail({ ...data, to: toEmail }); // Enviar email con `to`
+      setSuccessMessage('Email enviado con éxito!');
       reset();
     } catch (error) {
-      setErrorMessage(error.response?.data?.message || 'Error sending email');
+      setErrorMessage(
+        error.response?.data?.message || 'Error al enviar el email.',
+      );
     }
   };
 
   return (
     <Layout>
       <h1 className="font-semibold text-3xl mb-5 bg-brand-header p-5">
-        Dejanos tu consulta!
+        ¡Déjanos tu consulta!
       </h1>
+
+      {/* Botón para abrir el modal */}
+      <div className="text-center mb-5">
+        <button className="btn bg-gray-500 text-white" onClick={openModal}>
+          Configurar destinatario
+        </button>
+      </div>
+
+      {/* Muestra el email seleccionado o mensaje de alerta */}
+      <div className="text-center text-gray-700 mb-5">
+        {toEmail ? (
+          <p>
+            📩 Enviar a: <strong>{toEmail}</strong>
+          </p>
+        ) : (
+          <p className="text-red-500">⚠ No hay destinatario configurado</p>
+        )}
+      </div>
+
+      {/* Formulario principal */}
       <form
         className="flex flex-col gap-5 p-5 bg-white shadow-md rounded-lg max-w-lg mx-auto"
         onSubmit={handleSubmit(sendEmail)}
@@ -46,7 +89,7 @@ export default function Email() {
         <input
           type="email"
           className="input"
-          placeholder="Mail"
+          placeholder="Tu Email"
           required
           {...register('from')}
         />
@@ -68,7 +111,7 @@ export default function Email() {
           {isSubmitting ? (
             <Loader className="animate-spin mx-auto" />
           ) : (
-            'Send Email'
+            'Enviar Email'
           )}
         </button>
 
@@ -77,6 +120,34 @@ export default function Email() {
         )}
         {errorMessage && <div className="text-red-500">{errorMessage}</div>}
       </form>
+
+      {/* Modal para ingresar destinatario */}
+      <Modal show={modalOpen}>
+        <div className="flex">
+          <h2 className="font-semibold mb-3">Configurar Destinatario</h2>
+          <button className="ml-auto focus:outline-none" onClick={closeModal}>
+            <X size={30} />
+          </button>
+        </div>
+        <hr />
+
+        <div className="flex flex-col gap-4 mt-5">
+          <input
+            type="email"
+            className="input"
+            placeholder="Correo del destinatario"
+            value={toEmail}
+            onChange={(e) => setToEmail(e.target.value)}
+            required
+          />
+          <button
+            className="btn bg-green-500 text-white"
+            onClick={confirmRecipient}
+          >
+            Guardar destinatario
+          </button>
+        </div>
+      </Modal>
     </Layout>
   );
 }

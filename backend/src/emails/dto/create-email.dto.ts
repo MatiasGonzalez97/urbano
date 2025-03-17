@@ -1,6 +1,17 @@
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+
 export class CreateEmailDto {
-    from: string;
-    subject: string;
-    message: string;
-    to:string;
+  @IsEmail()
+  from: string;
+
+  @IsEmail()
+  to: string;
+
+  @IsString()
+  @IsNotEmpty()
+  subject: string;
+
+  @IsString()
+  @IsNotEmpty()
+  message: string;
 }

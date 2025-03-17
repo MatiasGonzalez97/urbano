@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 interface EmailData {
+  to: string;
   from: string;
   subject: string;
   message: string;
