@@ -13,6 +13,7 @@ import courseService from '../services/CourseService';
 export default function Courses() {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [image, setImage] = useState<File | null>(null); // Estado para la imagen
 
   const [addCourseShow, setAddCourseShow] = useState<boolean>(false);
   const [error, setError] = useState<string>();
@@ -37,14 +38,29 @@ export default function Courses() {
     reset,
   } = useForm<CreateCourseRequest>();
 
-  const saveCourse = async (createCourseRequest: CreateCourseRequest) => {
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files?.length) {
+      setImage(event.target.files[0]);
+    }
+  };
+
+  const saveCourse = async (data: CreateCourseRequest) => {
     try {
-      await courseService.save(createCourseRequest);
+      const formData = new FormData();
+      formData.append('name', data.name);
+      formData.append('description', data.description);
+      if (image) {
+        formData.append('image', image); // Agregar la imagen al FormData
+      }
+
+      await courseService.save(formData);
       setAddCourseShow(false);
       reset();
+      setImage(null); // Resetear la imagen después de subir
       setError(null);
+      refetch();
     } catch (error) {
-      setError(error.response.data.message);
+      setError(error.response?.data?.message || 'Error al guardar el curso');
     }
   };
 
@@ -71,7 +87,7 @@ export default function Courses() {
 
       <CoursesTable data={data} isLoading={isLoading} refetch={refetch} />
 
-      {/* Add User Modal */}
+      {/* Add Course Modal */}
       <Modal show={addCourseShow}>
         <div className="flex">
           <h1 className="font-semibold mb-3">Add Course</h1>
@@ -80,6 +96,7 @@ export default function Courses() {
             onClick={() => {
               reset();
               setAddCourseShow(false);
+              setImage(null);
             }}
           >
             <X size={30} />
@@ -90,6 +107,7 @@ export default function Courses() {
         <form
           className="flex flex-col gap-5 mt-5"
           onSubmit={handleSubmit(saveCourse)}
+          encType="multipart/form-data"
         >
           <input
             type="text"
@@ -107,6 +125,14 @@ export default function Courses() {
             required
             {...register('description')}
           />
+          {/* Input para subir la imagen */}
+          <input
+            type="file"
+            className="input"
+            accept="image/*"
+            onChange={handleFileChange}
+          />
+
           <button className="btn" disabled={isSubmitting}>
             {isSubmitting ? (
               <Loader className="animate-spin mx-auto" />

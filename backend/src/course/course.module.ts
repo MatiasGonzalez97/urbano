@@ -1,5 +1,6 @@
 import { forwardRef, Module } from '@nestjs/common';
-
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 import { ContentModule } from '../content/content.module';
 import { CourseController } from './course.controller';
 import { CourseService } from './course.service';

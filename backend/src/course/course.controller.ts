@@ -8,9 +8,10 @@ import {
   Put,
   Query,
   UseGuards,
+  UploadedFile, UseInterceptors 
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-
+import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtGuard } from '../auth/guards/jwt.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { CreateContentDto, UpdateContentDto } from '../content/content.dto';
@@ -23,7 +24,8 @@ import { CreateCourseDto, UpdateCourseDto } from './course.dto';
 import { Course } from './course.entity';
 import { CourseQuery } from './course.query';
 import { CourseService } from './course.service';
-
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 @Controller('courses')
 @ApiBearerAuth()
 @UseGuards(JwtGuard, RolesGuard)
@@ -35,9 +37,23 @@ export class CourseController {
   ) {}
 
   @Post()
+  @UseInterceptors(
+    FileInterceptor('image', {
+      storage: diskStorage({
+        destination: (req, file, cb) => {
+          const uploadPath = './uploads';
+          cb(null, uploadPath);
+        },
+        filename: (req, file, cb) => {
+          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 99999);
+          cb(null, `${uniqueSuffix}${extname(file.originalname)}`);
+        },
+      }),
+    }),
+  )
   @Roles(Role.Admin, Role.Editor)
-  async save(@Body() createCourseDto: CreateCourseDto): Promise<Course> {
-    return await this.courseService.save(createCourseDto);
+  async save(@Body() createCourseDto: CreateCourseDto,   @UploadedFile() file: Express.Multer.File): Promise<Course> {
+    return await this.courseService.save(createCourseDto, file);
   }
 
   @Get()

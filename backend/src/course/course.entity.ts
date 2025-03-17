@@ -21,6 +21,9 @@ export class Course extends BaseEntity {
 
   @Column()
   dateCreated: Date;
+  
+  @Column({nullable: true})
+  picture: string;
 
   @OneToMany(() => Content, (content) => content.course)
   contents: Content[];

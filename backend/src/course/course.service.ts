@@ -1,16 +1,17 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ILike } from 'typeorm';
-
 import { CreateCourseDto, UpdateCourseDto } from './course.dto';
 import { Course } from './course.entity';
 import { CourseQuery } from './course.query';
 
 @Injectable()
 export class CourseService {
-  async save(createCourseDto: CreateCourseDto): Promise<Course> {
+  async save(createCourseDto: CreateCourseDto, file?:  Express.Multer.File ): Promise<Course> {
+    const imageUrl = file ? `/uploads/${file.filename}` : null;
     return await Course.create({
       ...createCourseDto,
       dateCreated: new Date(),
+      picture: imageUrl
     }).save();
   }
 

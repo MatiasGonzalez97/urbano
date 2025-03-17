@@ -1,11 +1,10 @@
 import Course from '../models/course/Course';
 import CourseQuery from '../models/course/CourseQuery';
-import CreateCourseRequest from '../models/course/CreateCourseRequest';
 import UpdateCourseRequest from '../models/course/UpdateCourseRequest';
 import apiService from './ApiService';
 
 class UserService {
-  async save(createCourseRequest: CreateCourseRequest): Promise<void> {
+  async save(createCourseRequest: FormData): Promise<void> {
     await apiService.post('/api/courses', createCourseRequest);
   }
 
