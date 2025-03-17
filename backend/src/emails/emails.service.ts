@@ -1,27 +1,40 @@
 import { Injectable } from '@nestjs/common';
 import { CreateEmailDto } from './dto/create-email.dto';
-import * as FormData from 'form-data';
-import Mailgun from "mailgun.js"; // mailgun.js v11.1.0
+const { MailtrapClient } = require("mailtrap");
+
 @Injectable()
 export class EmailsService {
-
-  async send(createEmailDto: CreateEmailDto) {
-    const { from, to, subject, message } = createEmailDto;
-    const mailgun = new Mailgun(FormData);
-    const mg = mailgun.client({
-      username: "api",
-      key: process.env.API_KEY || "API_KEY",
-    });
-    try {
-      const data = await mg.messages.create("sandboxb821cc50112449eb8b66fc8494520edc.mailgun.org", {
-        from: from,
-        to: [to],
-        subject: subject,
-        text: message,
+  async send(emailDTO: CreateEmailDto) {
+    const { from, to, subject, message } = emailDTO;
+    const TOKEN = process.env.EMAIL_K;
+    try{
+      const client = new MailtrapClient({
+        token: TOKEN,
       });
-      return data
-    } catch (error) {
-      console.log(error); //logs any error
+      
+      const sender = {
+        email: "hello@matigonzalez.online",
+        name: from,
+      };
+  
+      const recipients = [
+        {
+          email: to,
+        }
+      ];
+      
+      const response = await client
+        .send({
+          from: sender,
+          to: recipients,
+          subject: subject,
+          text: message,
+          category: "Integration Test",
+        }); 
+      return { success: true, response: response.data || "Email enviado correctamente." };
+    }catch(error) {
+      return { success: false, error: error.response?.data || error.message ||  "Error desconocido"};
     }
+    
   }
 }

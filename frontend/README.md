@@ -51,14 +51,19 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 [x] Cambiar favicon
 [x] modificar estilo con paleta de colores
 [x] fuentes
-[] Manejo de información. En las páginas se utiliza una librería “react-
+[x] Manejo de información. En las páginas se utiliza una librería “react-
 query” que está generando peticiones a la API cada 1 segundo para
 
 refrescar la información que se muestra al usuario. Podrías cambiar este
 comportamiento colocando un botón para refrescar y/o solicitar la
 información a la API a medida que el usuario interactúa con los filtros de
 la tabla (relacionado al siguiente punto).
-[] Soporte multilenguaje. Posibilidad de seleccionar idioma inglés o
-español.
-[] Sección Contacto. Formulario que dispare envío de email a una casilla
+[X] Métodos de filtrado, ordenamiento y paginación. Los listados de cursos,
+contenidos y usuarios se presentan sin muchas opciones, es decir, se
+solicitan todos los registros para cada entidad y se permite filtrar por
+nombre o descripción desde el frontend. Sería una buena opción ofrecer
+al usuario la posibilidad de filtrar, ordenar y paginar los resultados.
+[x] Sección Contacto. Formulario que dispare envío de email a una casilla
 configurable.
+[X] No es necesario actualziar la pagina para ver los cambios reflejados al actualizar o eliminar un curso 
+[X]  No es necesario actualziar la pagina para ver los cambios reflejados al actualizar o eliminar un usuario 

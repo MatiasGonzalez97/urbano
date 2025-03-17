@@ -21,7 +21,7 @@ export default function Email() {
     reset,
   } = useForm<EmailForm>();
 
-  const [toEmail, setToEmail] = useState(''); // Estado para el destinatario
+  const [toEmail, setToEmail] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -47,8 +47,12 @@ export default function Email() {
     setErrorMessage(null);
 
     try {
-      await emailService.sendEmail({ ...data, to: toEmail }); // Enviar email con `to`
-      setSuccessMessage('Email enviado con éxito!');
+      const response = await emailService.sendEmail({ ...data, to: toEmail });
+      if (response.data?.success) {
+        setSuccessMessage('Email enviado con éxito!');
+      } else {
+        setErrorMessage(response?.data?.message || 'Error al enviar el email.');
+      }
       reset();
     } catch (error) {
       setErrorMessage(
