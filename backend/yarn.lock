@@ -1175,6 +1175,11 @@
   dependencies:
     "@types/superagent" "*"
 
+"@types/validator@^13.11.8", "@types/validator@^13.12.2":
+  "integrity" "sha512-6SlHBzUW8Jhf3liqrGGXyTJSIFe4nqlJ5A5KaMZ2l/vbM3Wh3KSybots/wfWVzNLK4D1NZluDlSQIbIEPx6oyA=="
+  "resolved" "https://registry.npmjs.org/@types/validator/-/validator-13.12.2.tgz"
+  "version" "13.12.2"
+
 "@types/yargs-parser@*":
   "integrity" "sha512-I4q9QU9MQv4oEOz4tAHJtNz1cwuLxn2F3xcc2iV5WdqLPpUnj30aUuxt1mAxYTG+oe8CZMV/+6rU4S4gRDzqtQ=="
   "resolved" "https://registry.npmjs.org/@types/yargs-parser/-/yargs-parser-21.0.3.tgz"
@@ -2155,13 +2160,14 @@
     "isobject" "^3.0.0"
     "static-extend" "^0.1.1"
 
-"class-validator@^0.13.1":
-  "integrity" "sha512-yBUcQy07FPlGzUjoLuUfIOXzgynnQPPruyK1Ge2B74k9ROwnle1E+NxLWnUv5OLU8hA/qL5leAE9XnXq3byaBw=="
-  "resolved" "https://registry.npmjs.org/class-validator/-/class-validator-0.13.2.tgz"
-  "version" "0.13.2"
+"class-validator@^0.14.1":
+  "integrity" "sha512-2VEG9JICxIqTpoK1eMzZqaV+u/EiwEJkMGzTrZf6sU/fwsnOITVgYJ8yojSy6CaXtO9V0Cc6ZQZ8h8m4UBuLwQ=="
+  "resolved" "https://registry.npmjs.org/class-validator/-/class-validator-0.14.1.tgz"
+  "version" "0.14.1"
   dependencies:
-    "libphonenumber-js" "^1.9.43"
-    "validator" "^13.7.0"
+    "@types/validator" "^13.11.8"
+    "libphonenumber-js" "^1.10.53"
+    "validator" "^13.9.0"
 
 "cli-cursor@^3.1.0":
   "integrity" "sha512-I/zHAwsKf9FqGoXM4WWRACob9+SNukZTd94DWF57E4toouRulbCxcUh6RKUEOQlYTHJnzkPMySvPNaaSLNfLZw=="
@@ -4761,7 +4767,7 @@
     "prelude-ls" "^1.2.1"
     "type-check" "~0.4.0"
 
-"libphonenumber-js@^1.9.43":
+"libphonenumber-js@^1.10.53":
   "integrity" "sha512-PJiS4ETaUfCOFLpmtKzAbqZQjCCKVu2OhTV4SVNNE7c2nu/dACvtCqj4L0i/KWNnIgRv7yrILvBj5Lonv5Ncxw=="
   "resolved" "https://registry.npmjs.org/libphonenumber-js/-/libphonenumber-js-1.12.6.tgz"
   "version" "1.12.6"
@@ -7420,7 +7426,7 @@
     "spdx-correct" "^3.0.0"
     "spdx-expression-parse" "^3.0.0"
 
-"validator@^13.7.0":
+"validator@^13.9.0":
   "integrity" "sha512-c1Q0mCiPlgdTVVVIJIrBuxNicYE+t/7oKeI9MWLj3fh/uq2Pxh/3eeWbVZ4OcGW1TUf53At0njHw5SMdA3tmMg=="
   "resolved" "https://registry.npmjs.org/validator/-/validator-13.12.0.tgz"
   "version" "13.12.0"

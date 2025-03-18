@@ -1,4 +1,4 @@
-FROM node:alpine as build
+FROM node:18-alpine AS builder
 
 WORKDIR /app
 
@@ -11,9 +11,7 @@ COPY . .
 
 RUN yarn build
 
-#---
-
-FROM node:alpine
+FROM node:18-alpine
 
 WORKDIR /app
 
@@ -25,7 +23,7 @@ COPY ormconfig.js .
 
 RUN yarn install --production
 
-COPY --from=build /app/dist ./dist
+COPY --from=builder /app/dist /app/dist
 
 EXPOSE 5000
 
