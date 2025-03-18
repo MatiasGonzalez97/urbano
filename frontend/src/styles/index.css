@@ -56,12 +56,10 @@
 
 @layer components {
   .btn {
-    
     @apply p-3 bg-blue-500 rounded-md focus:outline-none text-white;
     @apply hover:bg-blue-700 transition-all;
     @apply focus:ring disabled:opacity-50;
     background-color: #c1292e;
-    
   }
   .btn.danger {
     @apply bg-red-500 hover:bg-red-700;
