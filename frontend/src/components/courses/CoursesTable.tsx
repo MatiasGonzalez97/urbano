@@ -68,21 +68,26 @@ export default function CoursesTable({
       setError(error.response?.data?.message || 'Error updating course');
     }
   };
+  console.log(data);
+  const baseURL = 'http://127.0.0.1:5000';
+  const filteredData = data.filter(
+    ({ name, description, dateCreated, picture }) => {
+      const courseDate = new Date(dateCreated).toLocaleDateString('en-CA');
 
-  const filteredData = data.filter(({ name, description, dateCreated }) => {
-    const courseDate = new Date(dateCreated).toLocaleDateString('en-CA');
-
-    return (
-      name.toLowerCase().includes(nameFilter.toLowerCase()) &&
-      description.toLowerCase().includes(descriptionFilter.toLowerCase()) &&
-      (!dateFilter || courseDate.includes(dateFilter))
-    );
-  });
+      return (
+        name.toLowerCase().includes(nameFilter.toLowerCase()) &&
+        description.toLowerCase().includes(descriptionFilter.toLowerCase()) &&
+        (!dateFilter || courseDate.includes(dateFilter))
+      );
+    },
+  );
 
   return (
     <>
       <div className="table-container">
-        <Table columns={['Name', 'Description', 'Created', 'Actions']}>
+        <Table
+          columns={['Name', 'Description', 'Created', 'Imagen', 'Actions']}
+        >
           <tr>
             <TableItem>
               <input
@@ -111,48 +116,60 @@ export default function CoursesTable({
                 onChange={(e) => setDateFilter(e.target.value)}
               />
             </TableItem>
+            <TableItem>
+              <span></span>
+            </TableItem>
             <TableItem children={''}></TableItem>{' '}
           </tr>
 
           {isLoading
             ? null
-            : filteredData.map(({ id, name, description, dateCreated }) => (
-                <tr key={id}>
-                  <TableItem>
-                    <Link to={`/courses/${id}`}>{name}</Link>
-                  </TableItem>
-                  <TableItem>{description}</TableItem>
-                  <TableItem>
-                    {new Date(dateCreated).toLocaleDateString()}
-                  </TableItem>
-                  <TableItem className="text-right">
-                    {['admin', 'editor'].includes(authenticatedUser.role) && (
-                      <button
-                        className="text-indigo-600 hover:text-indigo-900 focus:outline-none"
-                        onClick={() => {
-                          setSelectedCourseId(id);
-                          setValue('name', name);
-                          setValue('description', description);
-                          setUpdateShow(true);
-                        }}
-                      >
-                        Edit
-                      </button>
-                    )}
-                    {authenticatedUser.role === 'admin' && (
-                      <button
-                        className="text-red-600 hover:text-red-900 ml-3 focus:outline-none"
-                        onClick={() => {
-                          setSelectedCourseId(id);
-                          setDeleteShow(true);
-                        }}
-                      >
-                        Delete
-                      </button>
-                    )}
-                  </TableItem>
-                </tr>
-              ))}
+            : filteredData.map(
+                ({ id, name, description, dateCreated, picture }) => (
+                  <tr key={id}>
+                    <TableItem>
+                      <Link to={`/courses/${id}`}>{name}</Link>
+                    </TableItem>
+                    <TableItem>{description}</TableItem>
+                    <TableItem>
+                      {new Date(dateCreated).toLocaleDateString()}
+                    </TableItem>
+                    <TableItem>
+                      <img
+                        src={`${baseURL}${picture}`}
+                        alt="imagen"
+                        className="max-w-28 max-h-28"
+                      ></img>
+                    </TableItem>
+                    <TableItem className="text-right">
+                      {['admin', 'editor'].includes(authenticatedUser.role) && (
+                        <button
+                          className="text-indigo-600 hover:text-indigo-900 focus:outline-none"
+                          onClick={() => {
+                            setSelectedCourseId(id);
+                            setValue('name', name);
+                            setValue('description', description);
+                            setUpdateShow(true);
+                          }}
+                        >
+                          Edit
+                        </button>
+                      )}
+                      {authenticatedUser.role === 'admin' && (
+                        <button
+                          className="text-red-600 hover:text-red-900 ml-3 focus:outline-none"
+                          onClick={() => {
+                            setSelectedCourseId(id);
+                            setDeleteShow(true);
+                          }}
+                        >
+                          Delete
+                        </button>
+                      )}
+                    </TableItem>
+                  </tr>
+                ),
+              )}
         </Table>
 
         {!isLoading && filteredData.length < 1 && (
