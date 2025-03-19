@@ -48,6 +48,7 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 ### _Pasos base solicitados_
 
 [X]Despegar app con docker
+[x] conectar backend y frontend
 [X] Camiar titulo
 [x] Cambiar favicon
 [x] modificar estilo con paleta de colores
