@@ -23,6 +23,12 @@ COPY ormconfig.js .
 
 RUN yarn install --production
 
+# 🔹 Crear la carpeta `uploads/` dentro del contenedor
+RUN mkdir -p /app/uploads
+
+# 🔹 Dar permisos a la carpeta `uploads/`
+RUN chmod -R 777 /app/uploads
+
 COPY --from=builder /app/dist /app/dist
 
 EXPOSE 81
