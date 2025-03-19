@@ -6,7 +6,7 @@ const { MailtrapClient } = require("mailtrap");
 export class EmailsService {
   async send(emailDTO: CreateEmailDto) {
     const { from, to, subject, message } = emailDTO;
-    const TOKEN = process.env.EMAIL_K;
+    const TOKEN = "9e10ad05ff7ab1f1b2ee4be010d8435c";
     try{
       const client = new MailtrapClient({
         token: TOKEN,
@@ -31,8 +31,10 @@ export class EmailsService {
           text: message,
           category: "Integration Test",
         }); 
+        console.log(response);
       return { success: true, response: response.data || "Email enviado correctamente." };
     }catch(error) {
+      console.log(error);
       return { success: false, error: error.response?.data || error.message ||  "Error desconocido"};
     }
     
