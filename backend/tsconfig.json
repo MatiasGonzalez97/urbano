@@ -10,7 +10,6 @@
     "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
-    "rootDir": "./src",  // 🔹 Asegura que solo compile archivos en `src`
     "baseUrl": "./",
     "incremental": true
   }
