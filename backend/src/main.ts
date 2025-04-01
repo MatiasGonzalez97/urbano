@@ -30,7 +30,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({
     forbidUnknownValues: false
   }));
-
+  app.enableCors({ origin: true });
   const config = new DocumentBuilder()
     .setTitle('Carna Project API')
     .setDescription('Carna Project API Documentation')
